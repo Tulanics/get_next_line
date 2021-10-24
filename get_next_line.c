@@ -6,25 +6,31 @@
 /*   By: tconceic <tconceic@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 21:20:11 by tconceic          #+#    #+#             */
-/*   Updated: 2021/10/24 15:13:01 by tconceic         ###   ########.fr       */
+/*   Updated: 2021/10/24 16:14:57 by tconceic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 /***Função que guarda o que sobra do buffersize***/
-static char	make_backup(char *str)
+static char	*make_backup(char *str)
 {
 	int		i;
-	char	backup;
+	char	*backup;
 
 	i = 0;
-	while (str[i] && str[i] != '\0' && str[i] != '\n')
+	while (str[i] != '\0' && str[i] != '\n')
 		i++;
-	backup = (char *)malloc(sizeof (char) * ft_strlen(str) - i + 1));
+	if (str[i] == '\0')
+	{
+		free(str);
+		return (NULL);
+	}
+	backup = (char *)malloc(sizeof (char) * ft_strlen(str) - i + 1);
 	if (!backup)
 		return (NULL);
-	ft_strlcpy(backup, str, ft_strlen(str) - i + 1);
+	ft_strlcpy(backup, str + i + 1, ft_strlen(str) - i + 1);
+	free(str);
 	return (backup);
 }
 
@@ -37,12 +43,12 @@ static char	*find_break_line(char *str)
 	i = 0;
 	if (!str)
 		return (NULL);
-	while (str[i] || str[i] != '\0' || str[i] != '\n')
+	while (str[i] != '\0' && str[i] != '\n')
 		i++;
 	line = (char *)malloc(sizeof (char) * (i + 2));
 	if (!line)
 		return (NULL);
-	ft_strlcpy(line, str, (i + 2));
+	ft_strlcpy(line, str, i + 2);
 	if (line[0] == '\0')
 	{
 		free(line);
@@ -52,7 +58,7 @@ static char	*find_break_line(char *str)
 }
 
 /* Função que lê e agrupa as strings caso precise*/
-static char	*read_and_join(int fd, char *str, void *buffer)
+static char	*read_and_join(int fd, char *str, char *buffer)
 {
 	int		read_buffer;
 	int		cntrl;
@@ -60,10 +66,10 @@ static char	*read_and_join(int fd, char *str, void *buffer)
 
 	read_buffer = 1;
 	cntrl = 0;
-	while (cntrl == 0 || read_buffer != 0)
+	while (cntrl == 0 && read_buffer != 0)
 	{
 		read_buffer = read(fd, buffer, BUFFER_SIZE);
-		if (read_buffer == -1 )
+		if (read_buffer == -1)
 		{
 			free(buffer);
 			return (NULL);
@@ -87,15 +93,12 @@ char	*get_next_line(int fd)
 	static char	*str;
 	char		*buffer;
 
-	line = '\0';
+	line = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buffer = (char *)malloc(sizeof (char) * BUFFER_SIZE + 1);
-	if (buffer == '\0')
-	{
-		free(buffer);
+	buffer =(char *)malloc(sizeof (char) * (BUFFER_SIZE + 1));
+	if (!buffer)
 		return (NULL);
-	}
 	str = read_and_join(fd, str, buffer);
 	if (!str)
 		return (NULL);
