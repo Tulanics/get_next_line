@@ -6,7 +6,7 @@
 /*   By: tconceic <tconceic@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 21:20:32 by tconceic          #+#    #+#             */
-/*   Updated: 2021/10/23 20:49:54 by tconceic         ###   ########.fr       */
+/*   Updated: 2021/10/24 15:13:11 by tconceic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,17 @@ char	*ft_strchr(const char *str, int ch)
 	if (str[i] == '\0' && ch == '\0')
 		return ((char *)str + i);
 	return (NULL);
+}
+
+char	*ft_strdup(const char *str1)
+{
+	char	*str2;
+	size_t	str_size;
+
+	str_size = ft_strlen(str1) + 1;
+	str2 = (char *)malloc(str_size);
+	if (!str2)
+		return (NULL);
+	ft_strlcpy(str2, str1, str_size);
+	return (str2);
 }

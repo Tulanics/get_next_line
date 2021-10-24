@@ -6,7 +6,7 @@
 /*   By: tconceic <tconceic@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 21:20:11 by tconceic          #+#    #+#             */
-/*   Updated: 2021/10/23 21:26:53 by tconceic         ###   ########.fr       */
+/*   Updated: 2021/10/24 15:13:01 by tconceic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,17 @@
 /***Função que guarda o que sobra do buffersize***/
 static char	make_backup(char *str)
 {
+	int		i;
+	char	backup;
+
+	i = 0;
+	while (str[i] && str[i] != '\0' && str[i] != '\n')
+		i++;
+	backup = (char *)malloc(sizeof (char) * ft_strlen(str) - i + 1));
+	if (!backup)
+		return (NULL);
+	ft_strlcpy(backup, str, ft_strlen(str) - i + 1);
+	return (backup);
 }
 
 /*Retorna a string qdo tem '\n'*/
@@ -73,8 +84,8 @@ static char	*read_and_join(int fd, char *str, void *buffer)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	char		*str;
-	static char	*buffer;
+	static char	*str;
+	char		*buffer;
 
 	line = '\0';
 	if (fd < 0 || BUFFER_SIZE <= 0)

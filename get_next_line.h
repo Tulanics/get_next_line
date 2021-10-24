@@ -6,7 +6,7 @@
 /*   By: tconceic <tconceic@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/14 21:19:56 by tconceic          #+#    #+#             */
-/*   Updated: 2021/10/23 20:46:47 by tconceic         ###   ########.fr       */
+/*   Updated: 2021/10/24 14:40:52 by tconceic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,3 +23,4 @@ size_t	ft_strlen(const char *str);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strchr(const char *str, int ch);
+char	*ft_strdup(const char *str1);
